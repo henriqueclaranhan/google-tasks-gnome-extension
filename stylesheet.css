@@ -6,8 +6,7 @@
     background-color: transparent;
 }
 .gtasks-new-task-entry {
-    border-radius: 5px;
-    padding: 5px;
+    margin-bottom: 4px;
 }
 .gtasks-tasks-box {
     spacing: 5px;
