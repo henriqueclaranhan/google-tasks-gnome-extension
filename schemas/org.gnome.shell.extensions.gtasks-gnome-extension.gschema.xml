@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.gtasks-gnome-extension" path="/org/gnome/shell/extensions/gtasks-gnome-extension/">
+    <key name="client-id" type="s">
+      <default>""</default>
+      <summary>Client ID</summary>
+    </key>
+    <key name="client-secret" type="s">
+      <default>""</default>
+      <summary>Client Secret</summary>
+    </key>
+    <key name="access-token" type="s">
+      <default>""</default>
+      <summary>Access Token</summary>
+    </key>
+    <key name="refresh-token" type="s">
+      <default>""</default>
+      <summary>Refresh Token</summary>
+    </key>
+  </schema>
+</schemalist>

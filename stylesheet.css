@@ -1,0 +1,38 @@
+.gtasks-tabs-box {
+    spacing: 5px;
+    padding: 5px;
+}
+.gtasks-no-hover-menu-item:hover, .gtasks-no-hover-menu-item:active {
+    background-color: transparent;
+}
+.gtasks-new-task-entry {
+    border-radius: 5px;
+    padding: 5px;
+}
+.gtasks-tasks-box {
+    spacing: 5px;
+}
+.gtasks-tab {
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+.gtasks-tab:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.gtasks-tab.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.gtasks-task-item {
+    spacing: 10px;
+    padding: 5px;
+}
+.gtasks-due-label {
+    opacity: 0.5;
+}
+.gtasks-action-button {
+    padding: 5px;
+    border-radius: 5px;
+}
+.gtasks-action-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}

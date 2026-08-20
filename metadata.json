@@ -1,0 +1,12 @@
+{
+  "name": "Google Tasks Gnome Integration",
+  "description": "Manage your Google Tasks directly from Gnome the top panel",
+  "uuid": "gtasks-gnome-extension@henrique.claranhan",
+  "shell-version": [
+    "49",
+    "50"
+  ],
+  "settings-schema": "org.gnome.shell.extensions.gtasks-gnome-extension",
+  "gettext-domain": "gtasks-gnome-extension",
+  "url": "https://github.com/henriqueclaranhan/google-tasks-gnome-extension"
+}

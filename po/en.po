@@ -1,0 +1,172 @@
+# English translations for PACKAGE package.
+# Copyright (C) 2026 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-19 20:01-0400\n"
+"PO-Revision-Date: 2026-08-19 20:01-0400\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/ui/indicator.ts:30
+msgid "Google Tasks"
+msgstr "Google Tasks"
+
+#: src/ui/indicator.ts:77
+msgid "Please authenticate in Extension Preferences."
+msgstr "Please authenticate in Extension Preferences."
+
+#: src/ui/indicator.ts:92
+msgid "Loading task lists..."
+msgstr "Loading task lists..."
+
+#: src/ui/indicator.ts:106
+msgid "New Task..."
+msgstr "New Task..."
+
+#: src/ui/indicator.ts:130
+msgid "Loading tasks..."
+msgstr "Loading tasks..."
+
+#: src/ui/indicator.ts:222 src/ui/indicator.ts:311
+msgid "Error loading"
+msgstr "Error loading"
+
+#: src/ui/indicator.ts:224
+msgid ""
+"The Google Tasks API is not enabled in your Google Cloud Project. Please "
+"enable it."
+msgstr ""
+"The Google Tasks API is not enabled in your Google Cloud Project. Please "
+"enable it."
+
+#: src/ui/indicator.ts:226
+msgid ""
+"Your session expired or the token is invalid. Please authenticate again in "
+"Preferences."
+msgstr ""
+"Your session expired or the token is invalid. Please authenticate again in "
+"Preferences."
+
+#: src/ui/indicator.ts:248
+msgid "No task lists found"
+msgstr "No task lists found"
+
+#: src/ui/indicator.ts:256 src/ui/indicator.ts:298
+msgid "No tasks"
+msgstr "No tasks"
+
+#: src/ui/indicator.ts:284
+msgid "Loading..."
+msgstr "Loading..."
+
+#: src/ui/indicator.ts:339
+msgid "Due:"
+msgstr "Due:"
+
+#: src/prefs.ts:19
+msgid "Google API Credentials"
+msgstr "Google API Credentials"
+
+#: src/prefs.ts:21
+msgid ""
+"You need to create a project in Google Cloud Console, enable the Tasks API, "
+"and create Desktop App OAuth credentials."
+msgstr ""
+"You need to create a project in Google Cloud Console, enable the Tasks API, "
+"and create Desktop App OAuth credentials."
+
+#: src/prefs.ts:27
+msgid "Client ID"
+msgstr "Client ID"
+
+#: src/prefs.ts:33
+msgid "Client Secret"
+msgstr "Client Secret"
+
+#: src/prefs.ts:39
+msgid "Authentication"
+msgstr "Authentication"
+
+#: src/prefs.ts:44
+msgid "Google account"
+msgstr "Google account"
+
+#: src/prefs.ts:49
+msgid "Login with Google"
+msgstr "Login with Google"
+
+#: src/prefs.ts:50
+msgid "Start authorization flow"
+msgstr "Start authorization flow"
+
+#: src/prefs.ts:53 src/prefs.ts:75
+msgid "Authenticate"
+msgstr "Authenticate"
+
+#: src/prefs.ts:61 src/prefs.ts:65
+msgid "Logout"
+msgstr "Logout"
+
+#: src/prefs.ts:62
+msgid "Remove the saved Google authorization from this extension"
+msgstr "Remove the saved Google authorization from this extension"
+
+#: src/prefs.ts:75
+msgid "Reconnect"
+msgstr "Reconnect"
+
+#: src/prefs.ts:79
+msgid "Not connected"
+msgstr "Not connected"
+
+#: src/prefs.ts:83 src/prefs.ts:87
+msgid "Connected to Google"
+msgstr "Connected to Google"
+
+#: src/prefs.ts:111 src/prefs.ts:154 src/prefs.ts:161
+msgid "Error"
+msgstr "Error"
+
+#: src/prefs.ts:111
+msgid "Please enter Client ID and Client Secret."
+msgstr "Please enter Client ID and Client Secret."
+
+#: src/prefs.ts:123
+msgid "Google Authorization"
+msgstr "Google Authorization"
+
+#: src/prefs.ts:124
+msgid ""
+"Please complete the authentication in your browser.\n"
+"\n"
+"Waiting for authorization..."
+msgstr ""
+"Please complete the authentication in your browser.\n"
+"\n"
+"Waiting for authorization..."
+
+#: src/prefs.ts:126
+msgid "Cancel"
+msgstr "Cancel"
+
+#: src/prefs.ts:150
+msgid "Success"
+msgstr "Success"
+
+#: src/prefs.ts:150
+msgid "Successfully authenticated with Google Tasks!"
+msgstr "Successfully authenticated with Google Tasks!"
+
+#: src/prefs.ts:174
+msgid "OK"
+msgstr "OK"

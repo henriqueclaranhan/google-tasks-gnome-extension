@@ -1,0 +1,164 @@
+# Portuguese translations for PACKAGE package
+# Traduções em português brasileiro para o pacote PACKAGE.
+# Copyright (C) 2026 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-19 20:01-0400\n"
+"PO-Revision-Date: 2026-08-19 20:01-0400\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/ui/indicator.ts:30
+msgid "Google Tasks"
+msgstr "Tarefas do Google"
+
+#: src/ui/indicator.ts:77
+msgid "Please authenticate in Extension Preferences."
+msgstr "Por favor, autentique-se nas Preferências da Extensão."
+
+#: src/ui/indicator.ts:92
+msgid "Loading task lists..."
+msgstr "Carregando listas de tarefas..."
+
+#: src/ui/indicator.ts:106
+msgid "New Task..."
+msgstr "Nova Tarefa..."
+
+#: src/ui/indicator.ts:130
+msgid "Loading tasks..."
+msgstr "Carregando tarefas..."
+
+#: src/ui/indicator.ts:222 src/ui/indicator.ts:311
+msgid "Error loading"
+msgstr "Erro ao carregar"
+
+#: src/ui/indicator.ts:224
+msgid ""
+"The Google Tasks API is not enabled in your Google Cloud Project. Please "
+"enable it."
+msgstr "A API do Google Tasks não está ativada no seu projeto do Google Cloud. Por favor, ative-a."
+
+#: src/ui/indicator.ts:226
+msgid ""
+"Your session expired or the token is invalid. Please authenticate again in "
+"Preferences."
+msgstr "Sua sessão expirou ou o token é inválido. Por favor, autentique-se novamente nas Preferências."
+
+#: src/ui/indicator.ts:248
+msgid "No task lists found"
+msgstr "Nenhuma lista de tarefas encontrada"
+
+#: src/ui/indicator.ts:256 src/ui/indicator.ts:298
+msgid "No tasks"
+msgstr "Nenhuma tarefa"
+
+#: src/ui/indicator.ts:284
+msgid "Loading..."
+msgstr "Carregando..."
+
+#: src/ui/indicator.ts:339
+msgid "Due:"
+msgstr "Prazo:"
+
+#: src/prefs.ts:19
+msgid "Google API Credentials"
+msgstr "Credenciais da API do Google"
+
+#: src/prefs.ts:21
+msgid ""
+"You need to create a project in Google Cloud Console, enable the Tasks API, "
+"and create Desktop App OAuth credentials."
+msgstr "Você precisa criar um projeto no Google Cloud Console, ativar a API do Tasks, e criar credenciais OAuth de Aplicativo de Desktop."
+
+#: src/prefs.ts:27
+msgid "Client ID"
+msgstr "ID do Cliente"
+
+#: src/prefs.ts:33
+msgid "Client Secret"
+msgstr "Chave Secreta do Cliente"
+
+#: src/prefs.ts:39
+msgid "Authentication"
+msgstr "Autenticação"
+
+#: src/prefs.ts:44
+msgid "Google account"
+msgstr "Conta do Google"
+
+#: src/prefs.ts:49
+msgid "Login with Google"
+msgstr "Fazer login com o Google"
+
+#: src/prefs.ts:50
+msgid "Start authorization flow"
+msgstr "Iniciar fluxo de autorização"
+
+#: src/prefs.ts:53 src/prefs.ts:75
+msgid "Authenticate"
+msgstr "Autenticar"
+
+#: src/prefs.ts:61 src/prefs.ts:65
+msgid "Logout"
+msgstr "Sair"
+
+#: src/prefs.ts:62
+msgid "Remove the saved Google authorization from this extension"
+msgstr "Remover a autorização do Google salva nesta extensão"
+
+#: src/prefs.ts:75
+msgid "Reconnect"
+msgstr "Reconectar"
+
+#: src/prefs.ts:79
+msgid "Not connected"
+msgstr "Não conectado"
+
+#: src/prefs.ts:83 src/prefs.ts:87
+msgid "Connected to Google"
+msgstr "Conectado ao Google"
+
+#: src/prefs.ts:111 src/prefs.ts:154 src/prefs.ts:161
+msgid "Error"
+msgstr "Erro"
+
+#: src/prefs.ts:111
+msgid "Please enter Client ID and Client Secret."
+msgstr "Por favor, insira o ID do Cliente e a Chave Secreta do Cliente."
+
+#: src/prefs.ts:123
+msgid "Google Authorization"
+msgstr "Autorização do Google"
+
+#: src/prefs.ts:124
+msgid ""
+"Please complete the authentication in your browser.\n"
+"\n"
+"Waiting for authorization..."
+msgstr "Por favor, conclua a autenticação no seu navegador.\n\nAguardando autorização..."
+
+#: src/prefs.ts:126
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: src/prefs.ts:150
+msgid "Success"
+msgstr "Sucesso"
+
+#: src/prefs.ts:150
+msgid "Successfully authenticated with Google Tasks!"
+msgstr "Autenticado com sucesso no Google Tasks!"
+
+#: src/prefs.ts:174
+msgid "OK"
+msgstr "OK"

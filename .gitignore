@@ -1,0 +1,19 @@
+# Node
+node_modules/
+package-lock.json
+
+# Build output
+dist/
+/extension.js
+/prefs.js
+/lib/
+/ui/
+/types/
+
+# GNOME Schemas
+schemas/gschemas.compiled
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
