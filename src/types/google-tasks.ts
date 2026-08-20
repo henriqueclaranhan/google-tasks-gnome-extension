@@ -3,6 +3,8 @@ export interface GoogleTask {
     title: string;
     due?: string;
     status?: string;
+    parent?: string;
+    position?: string;
 }
 
 export interface GoogleTaskList {

@@ -300,8 +300,23 @@ export class _TasksIndicator extends PanelMenu.Button {
 				return;
 			}
 
-			for (let task of tasks) {
-				this._addTaskItem(task);
+			const sortByPosition = (a: GoogleTask, b: GoogleTask) => {
+				if (a.position && b.position) return a.position.localeCompare(b.position);
+				return 0;
+			};
+
+			let topLevelTasks = tasks.filter(t => !t.parent || !tasks.some(p => p.id === t.parent));
+			let subTasks = tasks.filter(t => t.parent && tasks.some(p => p.id === t.parent));
+
+			topLevelTasks.sort(sortByPosition);
+
+			for (let task of topLevelTasks) {
+				this._addTaskItem(task, false);
+				let children = subTasks.filter(t => t.parent === task.id);
+				children.sort(sortByPosition);
+				for (let child of children) {
+					this._addTaskItem(child, true);
+				}
 			}
 		} catch (e) {
 			console.error("Failed to load tasks:", e);
@@ -319,12 +334,12 @@ export class _TasksIndicator extends PanelMenu.Button {
 		}
 	}
 
-	_addTaskItem(task: GoogleTask) {
+	_addTaskItem(task: GoogleTask, isSubtask: boolean = false) {
 		let taskLayout = new St.BoxLayout({
 			x_expand: true,
 			y_align: Clutter.ActorAlign.CENTER,
 			reactive: true,
-			style_class: "gtasks-task-item",
+			style_class: "gtasks-task-item" + (isSubtask ? " gtasks-subtask-item" : ""),
 		});
 
 		let textsLayout = new St.BoxLayout({ vertical: true, x_expand: true });
