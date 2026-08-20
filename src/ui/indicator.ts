@@ -90,6 +90,12 @@ export class _TasksIndicator extends PanelMenu.Button {
 		this.tabsBox = new St.BoxLayout({
 			style_class: "gtasks-tabs-box",
 			x_expand: true,
+			reactive: true,
+			can_focus: true,
+		});
+		this.tabsBox.connect("button-press-event", () => {
+			this.tabsBox.grab_key_focus();
+			return Clutter.EVENT_PROPAGATE;
 		});
 		this.tabsBox.add_child(
 			new St.Label({
@@ -128,6 +134,12 @@ export class _TasksIndicator extends PanelMenu.Button {
 			style_class: "gtasks-tasks-box",
 			vertical: true,
 			x_expand: true,
+			reactive: true,
+			can_focus: true,
+		});
+		this.tasksBox.connect("button-press-event", () => {
+			this.tasksBox.grab_key_focus();
+			return Clutter.EVENT_PROPAGATE;
 		});
 		this.tasksBox.add_child(
 			new St.Label({
@@ -271,6 +283,7 @@ export class _TasksIndicator extends PanelMenu.Button {
 			let tab = new St.Button({
 				label: list.title,
 				style_class: is_active ? "gtasks-tab active" : "gtasks-tab",
+				can_focus: true,
 			});
 
 			tab.connect("clicked", () => {
@@ -409,7 +422,13 @@ export class _TasksIndicator extends PanelMenu.Button {
 			x_expand: true,
 			y_align: Clutter.ActorAlign.CENTER,
 			reactive: true,
+			can_focus: true,
 			style_class: "gtasks-task-item" + (isSubtask ? " gtasks-subtask-item" : ""),
+		});
+
+		taskLayout.connect("button-press-event", () => {
+			taskLayout.grab_key_focus();
+			return Clutter.EVENT_PROPAGATE;
 		});
 
 		let isCompleted = task.status === "completed";
@@ -507,6 +526,12 @@ export class _TasksIndicator extends PanelMenu.Button {
 
 		titleEntry.clutter_text.connect("activate", () => {
 			void this._updateTaskTitle(task, taskLayout, titleEntry.get_text());
+		});
+
+		titleEntry.clutter_text.connect("key-focus-out", () => {
+			titleLabel.show();
+			titleEntry.hide();
+			titleEntry.set_text(task.title);
 		});
 
 		container.add_child(taskLayout);
