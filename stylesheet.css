@@ -30,6 +30,8 @@
 }
 .gtasks-due-label {
     opacity: 0.5;
+    font-size: 0.8em;
+    margin-top: 2px;
 }
 .gtasks-action-button {
     padding: 5px;
@@ -37,4 +39,23 @@
 }
 .gtasks-action-button:hover {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.gtasks-actions-box {
+    spacing: 5px;
+}
+
+.gtasks-check-button {
+    border-radius: 50%;
+}
+
+.gtasks-task-count-label {
+    margin-left: 5px;
+}
+
+.gtasks-more-button {
+    opacity: 0.5;
+}
+.gtasks-more-button:hover {
+    opacity: 1.0;
 }

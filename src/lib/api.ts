@@ -5,13 +5,10 @@ import GLib from "gi://GLib";
 import GoogleOAuthClient from "./auth.js";
 import type {
 	GoogleTask,
-	GoogleTaskList,
 	GoogleTaskListsResponse,
 	GoogleTasksResponse,
 	GoogleUserInfo,
 } from "../types/google-tasks.js";
-
-
 
 export type { GoogleTask, GoogleTaskList } from "../types/google-tasks.js";
 
@@ -72,21 +69,22 @@ export default class GoogleTasksAPI {
 
 		let msg = this._createRequest(method, url, body);
 
-		const executeRequest = () => new Promise<GLib.Bytes>((resolve, reject) => {
-			let timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 15000, () => {
-				timeoutId = 0;
-				reject(new Error("Request timed out after 15 seconds"));
-				return GLib.SOURCE_REMOVE;
+		const executeRequest = () =>
+			new Promise<GLib.Bytes>((resolve, reject) => {
+				let timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 15000, () => {
+					timeoutId = 0;
+					reject(new Error("Request timed out after 15 seconds"));
+					return GLib.SOURCE_REMOVE;
+				});
+				this._session.send_and_read_async(msg, GLib.PRIORITY_DEFAULT, null, (session, res) => {
+					if (timeoutId) GLib.source_remove(timeoutId);
+					try {
+						resolve(session!.send_and_read_finish(res));
+					} catch (e) {
+						reject(e);
+					}
+				});
 			});
-			this._session.send_and_read_async(msg, GLib.PRIORITY_DEFAULT, null, (session, res) => {
-				if (timeoutId) GLib.source_remove(timeoutId);
-				try {
-					resolve(session!.send_and_read_finish(res));
-				} catch (e) {
-					reject(e);
-				}
-			});
-		});
 
 		let bytes = await executeRequest();
 

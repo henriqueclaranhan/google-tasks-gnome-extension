@@ -47,7 +47,7 @@ export class _TasksIndicator extends PanelMenu.Button {
 		this.taskCountLabel = new St.Label({
 			text: "...",
 			y_align: Clutter.ActorAlign.CENTER,
-			style: "margin-left: 5px;",
+			style_class: "gtasks-task-count-label",
 		});
 		layout.add_child(this.taskCountLabel);
 
@@ -342,9 +342,16 @@ export class _TasksIndicator extends PanelMenu.Button {
 			style_class: "gtasks-task-item" + (isSubtask ? " gtasks-subtask-item" : ""),
 		});
 
-		let textsLayout = new St.BoxLayout({ vertical: true, x_expand: true });
+		let checkButton = new St.Button({
+			child: new St.Icon({ icon_name: "radio-symbolic", icon_size: 16 }),
+			style_class: "gtasks-action-button gtasks-check-button",
+		});
+		checkButton.connect("clicked", () => void this._completeTask(task, taskLayout));
+		taskLayout.add_child(checkButton);
 
-		let titleLabel = new St.Label({ text: task.title, x_expand: true });
+		let textsLayout = new St.BoxLayout({ vertical: true, x_expand: true, y_align: Clutter.ActorAlign.CENTER });
+
+		let titleLabel = new St.Label({ text: task.title, x_expand: true, y_align: Clutter.ActorAlign.CENTER });
 		textsLayout.add_child(titleLabel);
 
 		if (task.due) {
@@ -353,26 +360,54 @@ export class _TasksIndicator extends PanelMenu.Button {
 			let dueLabel = new St.Label({
 				text: `${_("Due:")} ${d}/${m}/${y}`,
 				style_class: "dim-label gtasks-due-label",
-				style: "font-size: 0.8em; margin-top: 2px;",
 			});
 			textsLayout.add_child(dueLabel);
 		}
 
 		taskLayout.add_child(textsLayout);
 
-		let checkButton = new St.Button({
-			child: new St.Icon({ icon_name: "object-select-symbolic", icon_size: 16 }),
-			style_class: "gtasks-action-button",
+		let actionsBox = new St.BoxLayout({
+			visible: false,
+			style_class: "gtasks-actions-box",
+			y_align: Clutter.ActorAlign.CENTER,
 		});
-		checkButton.connect("clicked", () => void this._completeTask(task, taskLayout));
-		taskLayout.add_child(checkButton);
+
+		let moreButton = new St.Button({
+			child: new St.Icon({ icon_name: "view-more-symbolic", icon_size: 14 }),
+			style_class: "gtasks-action-button gtasks-more-button",
+		});
+
 
 		let deleteButton = new St.Button({
+			child: new St.Icon({ icon_name: "user-trash-symbolic", icon_size: 16 }),
+			style_class: "gtasks-action-button",
+		});
+
+		let closeActionsButton = new St.Button({
 			child: new St.Icon({ icon_name: "window-close-symbolic", icon_size: 16 }),
 			style_class: "gtasks-action-button",
 		});
+
+		actionsBox.add_child(deleteButton);
+		actionsBox.add_child(closeActionsButton);
+
+		taskLayout.add_child(actionsBox);
+		taskLayout.add_child(moreButton);
+
+		moreButton.connect("clicked", () => {
+			moreButton.hide();
+			actionsBox.show();
+		});
+
+		closeActionsButton.connect("clicked", () => {
+			actionsBox.hide();
+			moreButton.show();
+			titleLabel.show();
+		});
+
+
 		deleteButton.connect("clicked", () => void this._deleteTask(task, taskLayout));
-		taskLayout.add_child(deleteButton);
+
 
 		this.tasksBox.add_child(taskLayout);
 	}
@@ -388,6 +423,7 @@ export class _TasksIndicator extends PanelMenu.Button {
 			console.error("Failed to create task:", e);
 		}
 	}
+
 
 	private async _completeTask(task: GoogleTask, taskLayout: St.BoxLayout): Promise<void> {
 		const listId = this.activeListId;
