@@ -76,8 +76,12 @@ export class _TasksIndicator extends PanelMenu.Button {
 
 			let item = new PopupMenu.PopupMenuItem(_("Please authenticate in Extension Preferences."));
 			item.connect("activate", () => {
-				
-				if (!this.isDisposed) { GLib.idle_add(GLib.PRIORITY_DEFAULT, () => { this.onOpenPreferences(); return GLib.SOURCE_REMOVE; }); }
+				if (!this.isDisposed) {
+					GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
+						this.onOpenPreferences();
+						return GLib.SOURCE_REMOVE;
+					});
+				}
 			});
 			this.popupMenu.addMenuItem(item);
 			return;
@@ -218,12 +222,16 @@ export class _TasksIndicator extends PanelMenu.Button {
 					this.taskCountLabel.set_text("!");
 					this.tabsBox.destroy_all_children();
 					this.tasksBox.destroy_all_children();
-					
+
 					let errorText = e instanceof Error ? e.message : _("Error loading");
 					if (errorText.includes("Tasks API has not been used") || errorText.includes("403")) {
-						errorText = _("The Google Tasks API is not enabled in your Google Cloud Project. Please enable it.");
+						errorText = _(
+							"The Google Tasks API is not enabled in your Google Cloud Project. Please enable it.",
+						);
 					} else if (errorText.includes("401") || errorText.includes("refresh_token")) {
-						errorText = _("Your session expired or the token is invalid. Please authenticate again in Preferences.");
+						errorText = _(
+							"Your session expired or the token is invalid. Please authenticate again in Preferences.",
+						);
 					}
 
 					let errorLabel = new St.Label({
@@ -291,7 +299,10 @@ export class _TasksIndicator extends PanelMenu.Button {
 
 			this.tasksBox.destroy_all_children();
 
-			this.taskCountLabel.set_text(tasks.length.toString());
+			let activeTasks = tasks.filter((t) => t.status === "needsAction");
+			let completedTasks = tasks.filter((t) => t.status === "completed");
+
+			this.taskCountLabel.set_text(activeTasks.length.toString());
 
 			if (tasks.length === 0) {
 				this.tasksBox.add_child(
@@ -305,24 +316,83 @@ export class _TasksIndicator extends PanelMenu.Button {
 				return 0;
 			};
 
-			let topLevelTasks = tasks.filter(t => !t.parent || !tasks.some(p => p.id === t.parent));
-			let subTasks = tasks.filter(t => t.parent && tasks.some(p => p.id === t.parent));
+			let activeTopLevel = activeTasks.filter((t) => !t.parent || !activeTasks.some((p) => p.id === t.parent));
+			let activeSubTasks = activeTasks.filter((t) => t.parent && activeTasks.some((p) => p.id === t.parent));
+			activeTopLevel.sort(sortByPosition);
 
-			topLevelTasks.sort(sortByPosition);
-
-			for (let task of topLevelTasks) {
-				this._addTaskItem(task, false);
-				let children = subTasks.filter(t => t.parent === task.id);
+			for (let task of activeTopLevel) {
+				this._addTaskItem(task, false, this.tasksBox);
+				let children = activeSubTasks.filter((t) => t.parent === task.id);
 				children.sort(sortByPosition);
 				for (let child of children) {
-					this._addTaskItem(child, true);
+					this._addTaskItem(child, true, this.tasksBox);
 				}
+			}
+
+			if (completedTasks.length > 0) {
+				let accordionBox = new St.BoxLayout({ vertical: true, x_expand: true });
+
+				let accordionButton = new St.Button({
+					style_class: "gtasks-accordion-button",
+					x_expand: true,
+					reactive: true,
+					can_focus: true,
+				});
+				let accordionButtonLayout = new St.BoxLayout({ x_expand: true, y_align: Clutter.ActorAlign.CENTER });
+
+				let accordionIcon = new St.Icon({
+					icon_name: "pan-end-symbolic",
+					icon_size: 12,
+				});
+				let accordionLabel = new St.Label({
+					text: `Concluídas (${completedTasks.length})`,
+					style_class: "gtasks-accordion-label",
+					y_align: Clutter.ActorAlign.CENTER,
+				});
+				accordionButtonLayout.add_child(accordionIcon);
+				accordionButtonLayout.add_child(accordionLabel);
+				accordionButton.child = accordionButtonLayout;
+
+				let completedTasksBox = new St.BoxLayout({ vertical: true, x_expand: true, visible: false });
+
+				accordionButton.connect("clicked", () => {
+					let isVisible = completedTasksBox.visible;
+					completedTasksBox.visible = !isVisible;
+					accordionIcon.icon_name = isVisible ? "pan-end-symbolic" : "pan-down-symbolic";
+				});
+
+				accordionBox.add_child(accordionButton);
+				accordionBox.add_child(completedTasksBox);
+
+				let completedTopLevel = completedTasks.filter(
+					(t) => !t.parent || !completedTasks.some((p) => p.id === t.parent),
+				);
+				let completedSubTasks = completedTasks.filter(
+					(t) => t.parent && completedTasks.some((p) => p.id === t.parent),
+				);
+				// Sort completed tasks by 'updated' date descending
+				completedTopLevel.sort((a, b) => {
+					let d1 = a.updated ? new Date(a.updated).getTime() : 0;
+					let d2 = b.updated ? new Date(b.updated).getTime() : 0;
+					return d2 - d1;
+				});
+
+				for (let task of completedTopLevel) {
+					this._addTaskItem(task, false, completedTasksBox);
+					let children = completedSubTasks.filter((t) => t.parent === task.id);
+					children.sort(sortByPosition);
+					for (let child of children) {
+						this._addTaskItem(child, true, completedTasksBox);
+					}
+				}
+
+				this.tasksBox.add_child(accordionBox);
 			}
 		} catch (e) {
 			console.error("Failed to load tasks:", e);
 			if (!this.isDisposed && loadVersion === this.taskLoadVersion) {
 				this.tasksBox.destroy_all_children();
-				
+
 				let errorText = e instanceof Error ? e.message : _("Error loading");
 				let errorLabel = new St.Label({
 					text: errorText,
@@ -334,7 +404,7 @@ export class _TasksIndicator extends PanelMenu.Button {
 		}
 	}
 
-	_addTaskItem(task: GoogleTask, isSubtask: boolean = false) {
+	_addTaskItem(task: GoogleTask, isSubtask: boolean = false, container: St.BoxLayout = this.tasksBox) {
 		let taskLayout = new St.BoxLayout({
 			x_expand: true,
 			y_align: Clutter.ActorAlign.CENTER,
@@ -342,17 +412,29 @@ export class _TasksIndicator extends PanelMenu.Button {
 			style_class: "gtasks-task-item" + (isSubtask ? " gtasks-subtask-item" : ""),
 		});
 
+		let isCompleted = task.status === "completed";
 		let checkButton = new St.Button({
-			child: new St.Icon({ icon_name: "radio-symbolic", icon_size: 16 }),
+			child: new St.Icon({ icon_name: isCompleted ? "object-select-symbolic" : "radio-symbolic", icon_size: 16 }),
 			style_class: "gtasks-action-button gtasks-check-button",
 		});
-		checkButton.connect("clicked", () => void this._completeTask(task, taskLayout));
+		checkButton.connect("clicked", () => {
+			if (isCompleted) {
+				void this._uncompleteTask(task, taskLayout);
+			} else {
+				void this._completeTask(task, taskLayout);
+			}
+		});
 		taskLayout.add_child(checkButton);
 
 		let textsLayout = new St.BoxLayout({ vertical: true, x_expand: true, y_align: Clutter.ActorAlign.CENTER });
 
 		let titleLabel = new St.Label({ text: task.title, x_expand: true, y_align: Clutter.ActorAlign.CENTER });
-		let titleEntry = new St.Entry({ text: task.title, x_expand: true, visible: false, y_align: Clutter.ActorAlign.CENTER });
+		let titleEntry = new St.Entry({
+			text: task.title,
+			x_expand: true,
+			visible: false,
+			y_align: Clutter.ActorAlign.CENTER,
+		});
 		textsLayout.add_child(titleLabel);
 		textsLayout.add_child(titleEntry);
 
@@ -427,7 +509,7 @@ export class _TasksIndicator extends PanelMenu.Button {
 			void this._updateTaskTitle(task, taskLayout, titleEntry.get_text());
 		});
 
-		this.tasksBox.add_child(taskLayout);
+		container.add_child(taskLayout);
 	}
 
 	async _createNewTask(title: string) {
@@ -451,6 +533,24 @@ export class _TasksIndicator extends PanelMenu.Button {
 			if (!this.isDisposed && this.activeListId === listId) void this._loadTasks(listId);
 		} catch (error) {
 			console.error("Failed to update task:", error);
+		}
+	}
+
+	private async _uncompleteTask(task: GoogleTask, taskLayout: St.BoxLayout): Promise<void> {
+		const listId = this.activeListId;
+
+		if (!listId) return;
+
+		taskLayout.hide();
+
+		try {
+			await this.api.uncompleteTask(listId, task);
+
+			if (!this.isDisposed && this.activeListId === listId) void this._loadTasks(listId);
+		} catch (error) {
+			console.error("Failed to uncomplete task:", error);
+
+			if (!this.isDisposed) taskLayout.show();
 		}
 	}
 

@@ -138,11 +138,30 @@ export default class GoogleTasksAPI {
 	}
 
 	async getTasks(listId: string): Promise<GoogleTasksResponse> {
-		return this._request("GET", `${this._baseUrl}/lists/${encodeURIComponent(listId)}/tasks?showCompleted=false`);
+		return this._request(
+			"GET",
+			`${this._baseUrl}/lists/${encodeURIComponent(listId)}/tasks?showHidden=true&showCompleted=true`,
+		);
 	}
 
 	async insertTask(listId: string, title: string): Promise<GoogleTask> {
 		return this._request("POST", `${this._baseUrl}/lists/${encodeURIComponent(listId)}/tasks`, { title });
+	}
+
+	async uncompleteTask(listId: string, task: GoogleTask): Promise<GoogleTask> {
+		if (!task.id) {
+			throw new Error("Cannot uncomplete a task without an ID.");
+		}
+
+		return this._request(
+			"PUT",
+			`${this._baseUrl}/lists/${encodeURIComponent(listId)}/tasks/${encodeURIComponent(task.id)}`,
+			{
+				...task,
+				status: "needsAction",
+				completed: null,
+			},
+		);
 	}
 
 	async completeTask(listId: string, task: GoogleTask): Promise<GoogleTask> {
