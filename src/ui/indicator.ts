@@ -352,7 +352,9 @@ export class _TasksIndicator extends PanelMenu.Button {
 		let textsLayout = new St.BoxLayout({ vertical: true, x_expand: true, y_align: Clutter.ActorAlign.CENTER });
 
 		let titleLabel = new St.Label({ text: task.title, x_expand: true, y_align: Clutter.ActorAlign.CENTER });
+		let titleEntry = new St.Entry({ text: task.title, x_expand: true, visible: false, y_align: Clutter.ActorAlign.CENTER });
 		textsLayout.add_child(titleLabel);
+		textsLayout.add_child(titleEntry);
 
 		if (task.due) {
 			let datePart = task.due.split("T")[0];
@@ -377,6 +379,10 @@ export class _TasksIndicator extends PanelMenu.Button {
 			style_class: "gtasks-action-button gtasks-more-button",
 		});
 
+		let editButton = new St.Button({
+			child: new St.Icon({ icon_name: "document-edit-symbolic", icon_size: 16 }),
+			style_class: "gtasks-action-button",
+		});
 
 		let deleteButton = new St.Button({
 			child: new St.Icon({ icon_name: "user-trash-symbolic", icon_size: 16 }),
@@ -388,6 +394,7 @@ export class _TasksIndicator extends PanelMenu.Button {
 			style_class: "gtasks-action-button",
 		});
 
+		actionsBox.add_child(editButton);
 		actionsBox.add_child(deleteButton);
 		actionsBox.add_child(closeActionsButton);
 
@@ -403,11 +410,22 @@ export class _TasksIndicator extends PanelMenu.Button {
 			actionsBox.hide();
 			moreButton.show();
 			titleLabel.show();
+			titleEntry.hide();
 		});
 
+		editButton.connect("clicked", () => {
+			titleLabel.hide();
+			titleEntry.show();
+			titleEntry.grab_key_focus();
+			actionsBox.hide();
+			moreButton.show();
+		});
 
 		deleteButton.connect("clicked", () => void this._deleteTask(task, taskLayout));
 
+		titleEntry.clutter_text.connect("activate", () => {
+			void this._updateTaskTitle(task, taskLayout, titleEntry.get_text());
+		});
 
 		this.tasksBox.add_child(taskLayout);
 	}
@@ -424,6 +442,17 @@ export class _TasksIndicator extends PanelMenu.Button {
 		}
 	}
 
+	private async _updateTaskTitle(task: GoogleTask, taskLayout: St.BoxLayout, newTitle: string): Promise<void> {
+		const listId = this.activeListId;
+		if (!listId || !task.id || !newTitle.trim()) return;
+
+		try {
+			await this.api.updateTask(listId, task, newTitle);
+			if (!this.isDisposed && this.activeListId === listId) void this._loadTasks(listId);
+		} catch (error) {
+			console.error("Failed to update task:", error);
+		}
+	}
 
 	private async _completeTask(task: GoogleTask, taskLayout: St.BoxLayout): Promise<void> {
 		const listId = this.activeListId;

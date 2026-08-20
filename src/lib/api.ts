@@ -160,6 +160,21 @@ export default class GoogleTasksAPI {
 		);
 	}
 
+	async updateTask(listId: string, task: GoogleTask, newTitle: string): Promise<GoogleTask> {
+		if (!task.id) {
+			throw new Error("Cannot update a task without an ID.");
+		}
+
+		return this._request(
+			"PUT",
+			`${this._baseUrl}/lists/${encodeURIComponent(listId)}/tasks/${encodeURIComponent(task.id)}`,
+			{
+				...task,
+				title: newTitle,
+			},
+		);
+	}
+
 	async deleteTask(listId: string, taskId: string): Promise<void> {
 		await this._request<null>(
 			"DELETE",
